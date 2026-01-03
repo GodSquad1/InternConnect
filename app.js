@@ -17,7 +17,16 @@ const state = {
     score: 0,
     level: 1,
   },
+  communityFilters: {
+    sort: "recent",
+    company: "",
+    rating: "all",
+    verified: false,
+    warnings: false,
+  },
   resumeAnalysis: null,
+  selectedRole: null,
+  showReviewForm: false,
   searchQuery: "",
 }
 
@@ -458,6 +467,8 @@ function ExplorePage() {
           <option value="CA">California</option>
           <option value="NY">New York</option>
           <option value="Remote">Remote</option>
+          <option value="TX">Texas</option>
+          <option value="WA">Washington</option>
         </select>
         
         <select class="filter-select" onchange="updateFilter('type', this.value)">
@@ -467,6 +478,18 @@ function ExplorePage() {
           <option value="Remote">Remote</option>
           <option value="Hybrid">Hybrid</option>
         </select>
+
+        <select class="filter-select" onchange="sortInternships(this.value)">
+          <option value="recent">Most Recent</option>
+          <option value="salary-high">Highest Salary</option>
+          <option value="salary-low">Lowest Salary</option>
+          <option value="rating">Top Rated</option>
+          <option value="company">Company A-Z</option>
+        </select>
+      </div>
+
+      <div class="results-summary">
+        <span>${filteredInternships.length} opportunities found</span>
       </div>
 
       <div class="internships-grid">
@@ -587,31 +610,61 @@ function ResumePage() {
     <div class="page-container">
       <div class="page-header">
         <h1 class="page-title">AI Resume Analyzer</h1>
-        <p class="page-subtitle">Get instant feedback and discover your skill gaps</p>
+        <p class="page-subtitle">Upload your resume and coding projects for AI-powered skill gap analysis</p>
       </div>
 
       <div class="resume-upload-section">
-        <div class="upload-card">
-          <div class="upload-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/>
-              <line x1="12" x2="12" y1="3" y2="15"/>
-            </svg>
+        <div class="dual-upload-container">
+          <div class="upload-card">
+            <div class="upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" x2="8" y1="13" y2="13"/>
+                <line x1="16" x2="8" y1="17" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </div>
+            <h3>Upload Resume</h3>
+            <p>PDF or DOCX format</p>
+            <input type="file" id="resumeInput" accept=".pdf,.docx" onchange="handleResumeUpload(this)" style="display: none;">
+            <button class="btn btn-primary" onclick="document.getElementById('resumeInput').click()">
+              Choose Resume
+            </button>
+            <div id="resumeFileName" class="file-name"></div>
           </div>
-          <h3>Upload Your Resume</h3>
-          <p>Drag and drop or click to upload (PDF, DOCX)</p>
-          <input type="file" id="resumeInput" accept=".pdf,.docx" onchange="analyzeResume()" style="display: none;">
-          <button class="btn btn-primary" onclick="document.getElementById('resumeInput').click()">
-            Choose File
-          </button>
+
+          <div class="upload-card">
+            <div class="upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" x2="12" y1="15" y2="3"/>
+              </svg>
+            </div>
+            <h3>Upload Coding Files</h3>
+            <p>ZIP file with your projects</p>
+            <input type="file" id="codingFilesInput" accept=".zip" onchange="handleCodingUpload(this)" style="display: none;">
+            <button class="btn btn-secondary" onclick="document.getElementById('codingFilesInput').click()">
+              Choose ZIP File
+            </button>
+            <div id="codingFileName" class="file-name"></div>
+          </div>
         </div>
+
+        <button class="btn btn-gradient btn-analyze" onclick="analyzeResume()" id="analyzeBtn" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Analyze with Gemini AI
+        </button>
 
         ${
           state.resumeAnalysis
             ? `
           <div class="analysis-results">
-            <h2 class="results-title">Analysis Results</h2>
+            <h2 class="results-title">AI Analysis Results</h2>
             
             <div class="score-card">
               <div class="score-circle">
@@ -669,7 +722,7 @@ function ResumePage() {
                     <path d="M12 20h9"/>
                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                   </svg>
-                  Recommended Skills
+                  Recommended Skills to Learn
                 </h3>
                 <div class="skills-grid">
                   ${state.resumeAnalysis.skills.map((skill) => `<span class="skill-badge">${skill}</span>`).join("")}
@@ -787,6 +840,33 @@ function TrendsPage() {
 }
 
 function CommunityPage() {
+  let filteredReviews = [...REVIEWS]
+
+  // Apply filters
+  if (state.communityFilters.company) {
+    filteredReviews = filteredReviews.filter((r) =>
+      r.company.toLowerCase().includes(state.communityFilters.company.toLowerCase()),
+    )
+  }
+  if (state.communityFilters.rating !== "all") {
+    filteredReviews = filteredReviews.filter((r) => r.rating >= Number.parseInt(state.communityFilters.rating))
+  }
+  if (state.communityFilters.verified) {
+    filteredReviews = filteredReviews.filter((r) => r.verified)
+  }
+  if (state.communityFilters.warnings) {
+    filteredReviews = filteredReviews.filter((r) => r.warnings.length > 0)
+  }
+
+  // Apply sorting
+  if (state.communityFilters.sort === "rating-high") {
+    filteredReviews.sort((a, b) => b.rating - a.rating)
+  } else if (state.communityFilters.sort === "rating-low") {
+    filteredReviews.sort((a, b) => a.rating - b.rating)
+  } else if (state.communityFilters.sort === "helpful") {
+    filteredReviews.sort((a, b) => b.helpful - a.helpful)
+  }
+
   return `
     <div class="page-container">
       <div class="page-header">
@@ -794,16 +874,138 @@ function CommunityPage() {
         <p class="page-subtitle">Real experiences from real interns</p>
       </div>
 
-      <div class="community-filters">
-        <button class="filter-btn active">All Reviews</button>
-        <button class="filter-btn">Verified Only</button>
-        <button class="filter-btn">With Warnings</button>
-        <button class="filter-btn">Recent</button>
+      <div class="community-controls">
+        <div class="filters-bar">
+          <div class="search-filter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input type="text" 
+                   placeholder="Search by company..." 
+                   class="filter-input"
+                   value="${state.communityFilters.company}"
+                   onkeyup="updateCommunityFilter('company', this.value)">
+          </div>
+
+          <select class="filter-select" onchange="updateCommunityFilter('rating', this.value)">
+            <option value="all">All Ratings</option>
+            <option value="4">4+ Stars</option>
+            <option value="3">3+ Stars</option>
+            <option value="2">2+ Stars</option>
+          </select>
+
+          <select class="filter-select" onchange="updateCommunityFilter('sort', this.value)">
+            <option value="recent">Most Recent</option>
+            <option value="rating-high">Highest Rated</option>
+            <option value="rating-low">Lowest Rated</option>
+            <option value="helpful">Most Helpful</option>
+          </select>
+
+          <label class="filter-checkbox">
+            <input type="checkbox" onchange="updateCommunityFilter('verified', this.checked)">
+            <span>Verified Only</span>
+          </label>
+
+          <label class="filter-checkbox">
+            <input type="checkbox" onchange="updateCommunityFilter('warnings', this.checked)">
+            <span>With Warnings</span>
+          </label>
+        </div>
+
+        <button class="btn btn-gradient" onclick="toggleReviewForm()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" x2="12" y1="5" y2="19"/>
+            <line x1="5" x2="19" y1="12" y2="12"/>
+          </svg>
+          Write a Review
+        </button>
       </div>
 
+      <div class="results-summary">
+        <span>${filteredReviews.length} reviews found</span>
+      </div>
+
+      ${
+        state.showReviewForm
+          ? `
+        <div class="review-form-container">
+          <div class="review-form">
+            <h2>Share Your Internship Experience</h2>
+            <p class="form-subtitle">Help future interns make informed decisions</p>
+            
+            <form onsubmit="submitReview(event)">
+              <div class="form-group">
+                <label>Company Name *</label>
+                <input type="text" id="reviewCompany" placeholder="e.g., Google, Meta, Amazon" required>
+              </div>
+
+              <div class="form-group">
+                <label>Your Role *</label>
+                <input type="text" id="reviewRole" placeholder="e.g., Software Engineering Intern" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Your Name *</label>
+                  <input type="text" id="reviewAuthor" placeholder="e.g., John D." required>
+                </div>
+
+                <div class="form-group">
+                  <label>Rating *</label>
+                  <select id="reviewRating" required>
+                    <option value="">Select rating</option>
+                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                    <option value="4">⭐⭐⭐⭐ Good</option>
+                    <option value="3">⭐⭐⭐ Average</option>
+                    <option value="2">⭐⭐ Below Average</option>
+                    <option value="1">⭐ Poor</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Your Experience *</label>
+                <textarea id="reviewText" rows="5" placeholder="Share your honest experience about the internship, mentorship, work culture, learning opportunities, etc." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Pros (Optional)</label>
+                <input type="text" id="reviewPros" placeholder="What did you like? (comma separated)">
+              </div>
+
+              <div class="form-group">
+                <label>Cons (Optional)</label>
+                <input type="text" id="reviewCons" placeholder="What could be improved? (comma separated)">
+              </div>
+
+              <div class="form-group">
+                <label>Warning Flags (Select if applicable)</label>
+                <div class="warning-checkboxes">
+                  <label><input type="checkbox" name="warnings" value="Unpaid OT"> Unpaid Overtime</label>
+                  <label><input type="checkbox" name="warnings" value="Poor Management"> Poor Management</label>
+                  <label><input type="checkbox" name="warnings" value="No Mentorship"> No Mentorship</label>
+                  <label><input type="checkbox" name="warnings" value="Long Hours"> Long Hours</label>
+                  <label><input type="checkbox" name="warnings" value="Toxic Culture"> Toxic Culture</label>
+                  <label><input type="checkbox" name="warnings" value="Unpaid"> Unpaid Position</label>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="toggleReviewForm()">Cancel</button>
+                <button type="submit" class="btn btn-gradient">Submit Review</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `
+          : ""
+      }
+
       <div class="reviews-list">
-        ${REVIEWS.map(
-          (review, index) => `
+        ${filteredReviews
+          .map(
+            (review, index) => `
           <div class="review-card" style="animation-delay: ${index * 0.1}s">
             <div class="review-header">
               <div class="reviewer-info">
@@ -853,20 +1055,15 @@ function CommunityPage() {
               <button class="helpful-btn" onclick="markHelpful(${review.id})">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M7 10v12"/>
-                  <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/>
+                  <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/>
                 </svg>
                 Helpful (${review.helpful})
               </button>
             </div>
           </div>
         `,
-        ).join("")}
-      </div>
-
-      <div class="add-review-cta">
-        <h3>Share Your Experience</h3>
-        <p>Help future interns make informed decisions</p>
-        <button class="btn btn-primary">Write a Review</button>
+          )
+          .join("")}
       </div>
     </div>
   `
@@ -922,7 +1119,30 @@ function Footer() {
 
 // ============================================
 // EVENT HANDLERS
-// ============================================
+
+function handleResumeUpload(input) {
+  if (input.files && input.files[0]) {
+    document.getElementById("resumeFileName").textContent = `✓ ${input.files[0].name}`
+    checkAnalyzeButton()
+  }
+}
+
+function handleCodingUpload(input) {
+  if (input.files && input.files[0]) {
+    document.getElementById("codingFileName").textContent = `✓ ${input.files[0].name}`
+    checkAnalyzeButton()
+  }
+}
+
+function checkAnalyzeButton() {
+  const resumeFile = document.getElementById("resumeInput").files[0]
+  const codingFile = document.getElementById("codingFilesInput").files[0]
+  const analyzeBtn = document.getElementById("analyzeBtn")
+
+  if (resumeFile && codingFile && analyzeBtn) {
+    analyzeBtn.disabled = false
+  }
+}
 
 function searchFromHero() {
   const input = document.getElementById("heroSearch")
@@ -977,6 +1197,65 @@ function markHelpful(reviewId) {
     review.helpful++
     render()
   }
+}
+
+function sortInternships(sortBy) {
+  // This will be handled by backend - for now just re-render
+  render()
+}
+
+function updateCommunityFilter(key, value) {
+  state.communityFilters[key] = value
+  render()
+}
+
+function toggleReviewForm() {
+  state.showReviewForm = !state.showReviewForm
+  render()
+  if (state.showReviewForm) {
+    setTimeout(() => {
+      document.querySelector(".review-form-container").scrollIntoView({ behavior: "smooth", block: "start" })
+    }, 100)
+  }
+}
+
+function submitReview(event) {
+  event.preventDefault()
+
+  // Get form values
+  const company = document.getElementById("reviewCompany").value
+  const role = document.getElementById("reviewRole").value
+  const author = document.getElementById("reviewAuthor").value
+  const rating = Number.parseInt(document.getElementById("reviewRating").value)
+  const text = document.getElementById("reviewText").value
+
+  // Get selected warnings
+  const warningCheckboxes = document.querySelectorAll('input[name="warnings"]:checked')
+  const warnings = Array.from(warningCheckboxes).map((cb) => cb.value)
+
+  // Create review object - this will be sent to backend
+  const newReview = {
+    id: REVIEWS.length + 1,
+    company,
+    role,
+    author,
+    rating,
+    text,
+    warnings,
+    verified: false, // Backend will verify
+    helpful: 0,
+    date: "Just now",
+  }
+
+  // Add to reviews (in real app, this would be an API call)
+  REVIEWS.unshift(newReview)
+
+  // Show success message
+  alert("Thank you for your review! It will be verified and published soon.")
+
+  // Close form and refresh
+  state.showReviewForm = false
+  render()
 }
 
 // ============================================
@@ -1046,11 +1325,11 @@ function initScrollAnimations() {
 }
 
 function initNavbarScroll() {
-  let lastScroll = 0
+  let lastScroll = 0 // Declare lastScroll here
   const navbar = document.getElementById("navbar")
 
   window.addEventListener("scroll", () => {
-    const currentScroll = window.pageYOffset
+    const currentScroll = window.pageYOffset // Declare currentScroll here
 
     if (currentScroll > 50) {
       navbar.classList.add("scrolled")
@@ -1069,4 +1348,3 @@ function initNavbarScroll() {
 document.addEventListener("DOMContentLoaded", () => {
   render()
 })
-
