@@ -191,37 +191,235 @@ const PRACTICE_ROLES = [
     title: "Software Engineer",
     icon: "💻",
     difficulty: "Medium",
-    skills: ["Coding", "Algorithms", "Problem Solving"],
-    challenges: 12,
-    curriculum: [
+    skills: ["JavaScript", "Algorithms", "Problem Solving"],
+    challenges: 15,
+    description: "Master fundamental programming concepts and algorithms",
+    color: "#6366f1",
+    modules: [
       {
-        id: "module1",
-        title: "Algorithms Basics",
-        description: "Learn sorting, searching, and basic array manipulations",
+        id: "js-basics",
+        title: "JavaScript Fundamentals",
+        description: "Variables, functions, arrays, and objects",
         challenges: [
-          { id: "c1", title: "Implement Bubble Sort", points: 10, code: "" },
-          { id: "c2", title: "Binary Search Implementation", points: 10, code: "" },
-          { id: "c3", title: "Array Manipulations Exercises", points: 10, code: "" },
-        ],
+          {
+            id: "challenge-1",
+            title: "Reverse a String",
+            description: "Write a function that reverses a string",
+            difficulty: "Easy",
+            points: 10,
+            starterCode: `function reverseString(str) {
+  // Your code here
+  return str;
+}`,
+            solution: `function reverseString(str) {
+  return str.split('').reverse().join('');
+}`,
+            testCases: [
+              { input: 'hello', expected: 'olleh' },
+              { input: 'world', expected: 'dlrow' },
+              { input: '', expected: '' }
+            ],
+            hints: [
+              "Try using the split() method to convert string to array",
+              "Arrays have a reverse() method",
+              "Use join() to convert array back to string"
+            ]
+          },
+          {
+            id: "challenge-2",
+            title: "Find Maximum in Array",
+            description: "Find the largest number in an array",
+            difficulty: "Easy",
+            points: 10,
+            starterCode: `function findMax(arr) {
+  // Your code here
+  return 0;
+}`,
+            solution: `function findMax(arr) {
+  return Math.max(...arr);
+}`,
+            testCases: [
+              { input: [1, 5, 3, 9, 2], expected: 9 },
+              { input: [-1, -5, -3], expected: -1 },
+              { input: [42], expected: 42 }
+            ],
+            hints: [
+              "Consider using the spread operator with Math.max()",
+              "Or use a loop to iterate through the array",
+              "Don't forget to handle empty arrays"
+            ]
+          },
+          {
+            id: "challenge-3",
+            title: "FizzBuzz",
+            description: "Print numbers 1-100, but replace multiples of 3 with 'Fizz', 5 with 'Buzz', and both with 'FizzBuzz'",
+            difficulty: "Easy",
+            points: 15,
+            starterCode: `function fizzBuzz() {
+  // Your code here
+  const result = [];
+  for (let i = 1; i <= 100; i++) {
+    // Add your logic here
+  }
+  return result;
+}`,
+            solution: `function fizzBuzz() {
+  const result = [];
+  for (let i = 1; i <= 100; i++) {
+    if (i % 3 === 0 && i % 5 === 0) {
+      result.push('FizzBuzz');
+    } else if (i % 3 === 0) {
+      result.push('Fizz');
+    } else if (i % 5 === 0) {
+      result.push('Buzz');
+    } else {
+      result.push(i);
+    }
+  }
+  return result;
+}`,
+            testCases: [
+              { input: null, expected: Array.from({length: 100}, (_, i) => {
+                const num = i + 1;
+                if (num % 3 === 0 && num % 5 === 0) return 'FizzBuzz';
+                if (num % 3 === 0) return 'Fizz';
+                if (num % 5 === 0) return 'Buzz';
+                return num;
+              }) }
+            ],
+            hints: [
+              "Use the modulo operator (%) to check for multiples",
+              "Check for multiples of both 3 and 5 first",
+              "Then check for individual multiples"
+            ]
+          }
+        ]
       },
       {
-        id: "module2",
-        title: "Data Structures",
-        description: "Learn stacks, queues, and linked lists",
+        id: "algorithms",
+        title: "Data Structures & Algorithms",
+        description: "Arrays, objects, sorting, and searching",
         challenges: [
-          { id: "c4", title: "Stack with JS Array", points: 10, code: "" },
-          { id: "c5", title: "Queue using Linked List", points: 10, code: "" },
-        ],
+          {
+            id: "challenge-4",
+            title: "Two Sum",
+            description: "Find two numbers in an array that add up to a target",
+            difficulty: "Medium",
+            points: 20,
+            starterCode: `function twoSum(nums, target) {
+  // Your code here
+  return [];
+}`,
+            solution: `function twoSum(nums, target) {
+  const map = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (map.has(complement)) {
+      return [map.get(complement), i];
+    }
+    map.set(nums[i], i);
+  }
+  return [];
+}`,
+            testCases: [
+              { input: [[2, 7, 11, 15], 9], expected: [0, 1] },
+              { input: [[3, 2, 4], 6], expected: [1, 2] },
+              { input: [[3, 3], 6], expected: [0, 1] }
+            ],
+            hints: [
+              "Consider using a hash map to store numbers you've seen",
+              "For each number, calculate what number would complete the sum",
+              "Check if that complement exists in your map"
+            ]
+          },
+          {
+            id: "challenge-5",
+            title: "Binary Search",
+            description: "Implement binary search on a sorted array",
+            difficulty: "Medium",
+            points: 25,
+            starterCode: `function binarySearch(arr, target) {
+  // Your code here
+  return -1;
+}`,
+            solution: `function binarySearch(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+  
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    
+    if (arr[mid] === target) {
+      return mid;
+    } else if (arr[mid] < target) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  
+  return -1;
+}`,
+            testCases: [
+              { input: [[1, 3, 5, 7, 9, 11], 7], expected: 3 },
+              { input: [[1, 3, 5, 7, 9, 11], 2], expected: -1 },
+              { input: [[1], 1], expected: 0 }
+            ],
+            hints: [
+              "Binary search requires a sorted array",
+              "Start with the middle element",
+              "Eliminate half the search space each iteration"
+            ]
+          }
+        ]
       },
       {
-        id: "module3",
-        title: "Mini Project",
-        description: "Apply algorithms and data structures in a project",
+        id: "dom-manipulation",
+        title: "DOM Manipulation",
+        description: "Interact with HTML and CSS using JavaScript",
         challenges: [
-          { id: "c6", title: "Todo App with Sorting", points: 20, code: "" },
-        ],
-      },
-    ],
+          {
+            id: "challenge-6",
+            title: "Create a Counter",
+            description: "Build an interactive counter with increment and decrement buttons",
+            difficulty: "Easy",
+            points: 15,
+            starterCode: `// HTML: <div id="counter">0</div><button id="increment">+</button><button id="decrement">-</button>
+
+function setupCounter() {
+  // Your code here
+}`,
+            solution: `function setupCounter() {
+  const counter = document.getElementById('counter');
+  const increment = document.getElementById('increment');
+  const decrement = document.getElementById('decrement');
+  
+  let count = 0;
+  
+  increment.addEventListener('click', () => {
+    count++;
+    counter.textContent = count;
+  });
+  
+  decrement.addEventListener('click', () => {
+    count--;
+    counter.textContent = count;
+  });
+}`,
+            testCases: [
+              { input: 'click increment 3 times', expected: '3' },
+              { input: 'click decrement 2 times', expected: '-2' },
+              { input: 'mixed clicks: +, +, -, +', expected: '1' }
+            ],
+            hints: [
+              "Use getElementById to select elements",
+              "Add event listeners for button clicks",
+              "Update the counter display on each click"
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
     id: "data",
@@ -229,28 +427,80 @@ const PRACTICE_ROLES = [
     icon: "📊",
     difficulty: "Hard",
     skills: ["Python", "ML", "Statistics"],
-    challenges: 8,
-    curriculum: [
+    challenges: 12,
+    description: "Master data analysis and machine learning concepts",
+    color: "#06b6d4",
+    modules: [
       {
-        id: "module1",
+        id: "python-basics",
         title: "Python for Data Science",
         description: "NumPy, Pandas, and basic data manipulation",
         challenges: [
-          { id: "c1", title: "Data Cleaning with Pandas", points: 10, code: "" },
-          { id: "c2", title: "NumPy Array Operations", points: 10, code: "" },
-        ],
-      },
-      {
-        id: "module2",
-        title: "Machine Learning Intro",
-        description: "Learn regression, classification, and evaluation metrics",
-        challenges: [
-          { id: "c3", title: "Linear Regression on Sample Dataset", points: 15, code: "" },
-          { id: "c4", title: "Classification with KNN", points: 15, code: "" },
-        ],
-      },
-    ],
+          {
+            id: "challenge-7",
+            title: "Data Cleaning",
+            description: "Clean and preprocess a dataset",
+            difficulty: "Medium",
+            points: 20,
+            starterCode: `import pandas as pd
+import numpy as np
+
+def clean_data(df):
+    # Your code here
+    return df`,
+            solution: `import pandas as pd
+import numpy as np
+
+def clean_data(df):
+    # Remove duplicates
+    df = df.drop_duplicates()
+    
+    # Handle missing values
+    df = df.fillna(df.mean())
+    
+    # Remove outliers (using IQR method)
+    Q1 = df.quantile(0.25)
+    Q3 = df.quantile(0.75)
+    IQR = Q3 - Q1
+    df = df[~((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))).any(axis=1)]
+    
+    return df`,
+            testCases: [
+              { input: 'sample_dataframe', expected: 'cleaned_dataframe' },
+              { input: 'dataframe_with_nulls', expected: 'cleaned_dataframe' }
+            ],
+            hints: [
+              "Use pandas drop_duplicates() to remove duplicates",
+              "Handle missing values with fillna()",
+              "Consider using statistical methods for outlier detection"
+            ]
+          }
+        ]
+      }
+    ]
   },
+  {
+    id: "frontend",
+    title: "Frontend Developer",
+    icon: "🎨",
+    difficulty: "Medium",
+    skills: ["React", "CSS", "UI/UX"],
+    challenges: 10,
+    description: "Build beautiful and responsive user interfaces",
+    color: "#f59e0b",
+    modules: []
+  },
+  {
+    id: "backend",
+    title: "Backend Developer",
+    icon: "⚙️",
+    difficulty: "Hard",
+    skills: ["Node.js", "APIs", "Databases"],
+    challenges: 14,
+    description: "Build scalable server-side applications",
+    color: "#10b981",
+    modules: []
+  }
 ];
 
 const TRENDING_SKILLS = [
@@ -397,6 +647,21 @@ function Navigation() {
     </nav>
   `
 }
+
+// Add this test function
+function testPracticeNavigation() {
+  console.log("Testing practice navigation...");
+  console.log("PRACTICE_ROLES:", typeof PRACTICE_ROLES);
+  
+  // Test with a specific role
+  state.practiceMode.selectedRole = "software";
+  state.practiceMode.currentModule = 0;
+  state.practiceMode.currentChallenge = 0;
+  state.currentPage = "practiceSession";
+  render();
+}
+
+// Call this in your console to test: testPracticeNavigation()
 
 function HomePage() {
   return `
@@ -763,57 +1028,6 @@ function ExplorePage() {
   `
 }
 
-function PracticePage() {
-  return `
-    <div class="page-container">
-      <div class="page-header">
-        <h1 class="page-title">Practice Simulations</h1>
-        <p class="page-subtitle">Build real skills through gamified challenges</p>
-      </div>
-
-      <div class="practice-stats">
-        <div class="practice-stat">
-          <span class="stat-label">Current Level</span>
-          <span class="stat-value gradient-text">${state.practiceMode.level}</span>
-        </div>
-        <div class="practice-stat">
-          <span class="stat-label">Total Score</span>
-          <span class="stat-value gradient-text">${state.practiceMode.score}</span>
-        </div>
-        <div class="practice-stat">
-          <span class="stat-label">Challenges Completed</span>
-          <span class="stat-value gradient-text">0</span>
-        </div>
-      </div>
-
-      <h2 class="section-subtitle">Choose Your Path</h2>
-      
-      <div class="roles-grid">
-        ${PRACTICE_ROLES.map(
-          (role) => `
-          <div class="role-card ${state.practiceMode.selectedRole === role.id ? "selected" : ""}" 
-               onclick="selectPracticeRole('${role.id}')">
-            <div class="role-icon">${role.icon}</div>
-            <h3 class="role-title">${role.title}</h3>
-            <div class="role-difficulty difficulty-${role.difficulty.toLowerCase()}">
-              ${role.difficulty}
-            </div>
-            <div class="role-skills">
-              ${role.skills.map((skill) => `<span class="skill-tag">${skill}</span>`).join("")}
-            </div>
-            <div class="role-challenges">
-              ${role.challenges} Challenges
-            </div>
-            <button class="btn ${state.practiceMode.selectedRole === role.id ? "btn-primary" : "btn-ghost"} btn-full">
-              ${state.practiceMode.selectedRole === role.id ? "Continue" : "Start"}
-            </button>
-          </div>
-        `,
-        ).join("")}
-      </div>
-    </div>
-  `
-}
 
 function ResumePage() {
   return `
@@ -928,6 +1142,592 @@ function ResumePage() {
     </div>
   `
 }
+
+// ============================================
+// PRACTICE SESSION COMPONENTS
+// ============================================
+
+function PracticePage() {
+
+  const isLoggedIn = auth.currentUser !== null;  // ADD THIS LINE
+
+  return `
+    <div class="page-container">
+      <div class="page-header">
+        <h1 class="page-title">Practice Simulations</h1>
+        <p class="page-subtitle">Build real skills through gamified challenges</p>
+      </div>
+
+      <div class="practice-stats">
+        <div class="practice-stat">
+          <span class="stat-label">Current Level</span>
+          <span class="stat-value gradient-text">${state.practiceMode.level}</span>
+        </div>
+        <div class="practice-stat">
+          <span class="stat-label">Total Score</span>
+          <span class="stat-value gradient-text">${state.practiceMode.score}</span>
+        </div>
+        <div class="practice-stat">
+          <span class="stat-label">Challenges Completed</span>
+          <span class="stat-value gradient-text">0</span>
+        </div>
+      </div>
+
+      <h2 class="section-subtitle">Choose Your Path</h2>
+      
+      <div class="roles-grid">
+        ${PRACTICE_ROLES.map(
+          (role) => `
+          <div class="role-card ${state.practiceMode.selectedRole === role.id ? "selected" : ""}" 
+               onclick="selectPracticeRole('${role.id}')">
+            <div class="role-icon">${role.icon}</div>
+            <h3 class="role-title">${role.title}</h3>
+            <div class="role-difficulty difficulty-${role.difficulty.toLowerCase()}">
+              ${role.difficulty}
+            </div>
+            <div class="role-skills">
+              ${role.skills.map((skill) => `<span class="skill-tag">${skill}</span>`).join("")}
+            </div>
+            <div class="role-challenges">
+              ${role.challenges} Challenges
+            </div>
+            <button class="btn ${state.practiceMode.selectedRole === role.id ? "btn-primary" : "btn-ghost"} btn-full">
+              ${state.practiceMode.selectedRole === role.id ? "Continue" : "Start"}
+            </button>
+          </div>
+        `,
+        ).join("")}
+      </div>
+    </div>
+
+    // In your PracticePage function, update the role card mapping:
+${PRACTICE_ROLES.map(role => {
+  const isSelected = state.practiceMode.selectedRole === role.id;
+  const completedChallenges = state.practiceMode.completedChallenges?.[role.id] || 0;
+  const totalChallenges = role.challenges;
+  
+  console.log(`Generating card for role: ${role.id}, isSelected: ${isSelected}`);
+  
+  return `
+    <div class="role-card ${isSelected ? 'selected' : ''}" 
+         onclick="selectPracticeRole('${role.id}')"
+         data-role-id="${role.id}">
+      <div class="role-icon">${role.icon}</div>
+      <h3 class="role-title">${role.title}</h3>
+      <div class="role-difficulty difficulty-${role.difficulty.toLowerCase()}">
+        ${role.difficulty}
+      </div>
+      <p class="role-description">${role.description}</p>
+      <div class="role-skills">
+        ${role.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join("")}
+      </div>
+      
+      <!-- DEBUG INFO -->
+      <div style="font-size: 10px; color: #666; margin-top: 10px;">
+        Role ID: ${role.id} | Selected: ${isSelected}
+      </div>
+      
+      ${isLoggedIn ? `
+        <div class="role-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${(completedChallenges/totalChallenges) * 100}%"></div>
+          </div>
+          <span class="progress-text">${completedChallenges}/${totalChallenges} completed</span>
+        </div>
+      ` : `
+        <div class="role-locked">
+          <svg xmlns="http://www.w3.org/2000/svg " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Sign in to unlock
+        </div>
+      `}
+      
+      <button class="btn ${isSelected ? 'btn-primary' : 'btn-ghost'} btn-full" 
+              onclick="event.stopPropagation(); handleStartPractice('${role.id}')"
+              style="margin-top: 10px;">
+        ${isLoggedIn ? (completedChallenges > 0 ? 'Continue' : 'Start') : 'View Details'}
+      </button>
+    </div>
+  `;
+}).join("")}
+  `
+}
+
+function PracticeSessionPage() {
+  console.log("Entering PracticeSessionPage...");
+  
+  // Safety check for selected role
+  if (!state.practiceMode.selectedRole) {
+    console.error("No selected role found!");
+    return `
+      <div class="page-container">
+        <div class="page-header">
+          <h1 class="page-title">Practice Session Error</h1>
+          <button class="btn btn-secondary" onclick="navigate('practice')">
+            Back to Practice
+          </button>
+        </div>
+        <div class="practice-session">
+          <p>No role selected. Please go back and select a practice role.</p>
+          <button class="btn btn-primary" onclick="navigate('practice')">Go to Practice</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const role = PRACTICE_ROLES.find(r => r.id === state.practiceMode.selectedRole);
+  
+  if (!role) {
+    console.error("Role not found:", state.practiceMode.selectedRole);
+    return `
+      <div class="page-container">
+        <div class="page-header">
+          <h1 class="page-title">Role Not Found</h1>
+          <button class="btn btn-secondary" onclick="navigate('practice')">
+            Back to Practice
+          </button>
+        </div>
+        <div class="practice-session">
+          <p>Role "${state.practiceMode.selectedRole}" not found.</p>
+          <button class="btn btn-primary" onclick="navigate('practice')">Go to Practice</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Check for modules
+  if (!role.modules || role.modules.length === 0) {
+    return `
+      <div class="page-container">
+        <div class="page-header">
+          <h1 class="page-title">${role.title}</h1>
+          <button class="btn btn-secondary" onclick="navigate('practice')">
+            Back to Practice
+          </button>
+        </div>
+        <div class="practice-session">
+          <h2>No Challenges Available Yet</h2>
+          <p>${role.description}</p>
+          <p>Challenges for ${role.title} are coming soon!</p>
+          <button class="btn btn-primary" onclick="navigate('practice')">Back to Practice</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const currentModule = role.modules[state.practiceMode.currentModule || 0];
+  const currentChallenge = currentModule?.challenges?.[state.practiceMode.currentChallenge || 0];
+  
+  if (!currentChallenge) {
+    return `
+      <div class="page-container">
+        <div class="page-header">
+          <h1 class="page-title">${role.title} - ${currentModule.title}</h1>
+          <button class="btn btn-secondary" onclick="navigate('practice')">
+            Back to Practice
+          </button>
+        </div>
+        <div class="practice-session">
+          <h2>${currentModule.title}</h2>
+          <p>${currentModule.description}</p>
+          <button class="btn btn-primary" onclick="startFirstChallenge()">Start First Challenge</button>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="page-container">
+      <div class="page-header">
+        <h1 class="page-title">${role.title} - ${currentModule.title}</h1>
+        <div class="session-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${((state.practiceMode.currentChallenge || 0) / currentModule.challenges.length) * 100}%"></div>
+          </div>
+          <span class="progress-text">Challenge ${(state.practiceMode.currentChallenge || 0) + 1} of ${currentModule.challenges.length}</span>
+        </div>
+      </div>
+
+      <div class="practice-session">
+        <div class="challenge-header">
+          <h2>${currentChallenge.title}</h2>
+          <div class="challenge-meta">
+            <span class="difficulty-badge ${currentChallenge.difficulty.toLowerCase()}">${currentChallenge.difficulty}</span>
+            <span class="points-badge">+${currentChallenge.points} points</span>
+          </div>
+        </div>
+
+        <div class="challenge-description">
+          <p>${currentChallenge.description}</p>
+        </div>
+
+        <div class="code-editor-container">
+          <div class="editor-header">
+            <span>Code Editor</span>
+            <div class="editor-actions">
+              <button class="btn btn-sm btn-secondary" onclick="resetCode()">Reset</button>
+              <button class="btn btn-sm btn-primary" onclick="runCode()">Run Code</button>
+            </div>
+          </div>
+          
+          <div class="code-editor">
+            <textarea id="codeInput" placeholder="Write your code here...">${currentChallenge.starterCode}</textarea>
+          </div>
+        </div>
+
+        <div class="test-results" id="testResults" style="display: none;">
+          <h3>Test Results</h3>
+          <div id="testOutput"></div>
+        </div>
+
+        <div class="hints-section">
+          <h3>Need Help?</h3>
+          <div class="hints-container">
+            ${currentChallenge.hints.map((hint, index) => `
+              <div class="hint-item" onclick="toggleHint(${index})">
+                <div class="hint-header">
+                  <span>Hint ${index + 1}</span>
+                  <span class="hint-toggle">+</span>
+                </div>
+                <div class="hint-content" id="hint-${index}" style="display: none;">
+                  ${hint}
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="challenge-actions">
+          ${state.practiceMode.currentChallenge > 0 ? 
+            '<button class="btn btn-secondary" onclick="previousChallenge()">Previous</button>' : 
+            '<button class="btn btn-secondary" onclick="navigate(\'practice\')">Back to Practice</button>'
+          }
+          <button class="btn btn-primary" onclick="nextChallenge()">
+            ${state.practiceMode.currentChallenge < currentModule.challenges.length - 1 ? 'Next Challenge' : 'Complete Module'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function handleStartPractice(roleId) {
+  console.log("=== START PRACTICE DEBUG ===");
+  console.log("1. Start practice clicked for role:", roleId);
+  console.log("2. Current user:", auth.currentUser);
+  console.log("3. Practice mode before:", JSON.stringify(state.practiceMode, null, 2));
+  
+  if (!auth.currentUser) {
+    alert("Please sign in to start practicing!");
+    navigate("signIn");
+    return;
+  }
+
+  // Validate the role exists
+  const role = PRACTICE_ROLES.find(r => r.id === roleId);
+  console.log("4. Found role:", role);
+  
+  if (!role) {
+    console.error("5. Invalid role ID:", roleId);
+    alert("Invalid practice role selected");
+    return;
+  }
+
+  console.log("6. Setting practice state...");
+  state.practiceMode.selectedRole = roleId;
+  state.practiceMode.currentModule = 0;
+  state.practiceMode.currentChallenge = 0;
+  state.currentPage = "practiceSession";
+  
+  console.log("7. Practice mode after:", JSON.stringify(state.practiceMode, null, 2));
+  console.log("8. Navigating to practice session");
+  
+  render();
+  
+  // Verify the navigation worked
+  setTimeout(() => {
+    console.log("9. After navigation - current page:", state.currentPage);
+    console.log("10. After navigation - selected role:", state.practiceMode.selectedRole);
+  }, 200);
+}
+
+function startPracticeSession(roleId) {
+  console.log("Starting practice session for:", roleId);
+  
+  if (!auth.currentUser) {
+    alert("Please sign in to start practicing!");
+    navigate("signIn");
+    return;
+  }
+
+  // Validate the role exists
+  const role = PRACTICE_ROLES.find(r => r.id === roleId);
+  if (!role) {
+    console.error("Invalid role ID:", roleId);
+    alert("Invalid practice role selected");
+    return;
+  }
+
+  // Check if role has modules
+  if (!role.modules || role.modules.length === 0) {
+    alert(`No challenges available for ${role.title} yet. Check back soon!`);
+    return;
+  }
+
+  // Set practice state
+  state.practiceMode.selectedRole = roleId;
+  state.practiceMode.currentModule = 0;
+  state.practiceMode.currentChallenge = 0;
+  state.currentPage = "practiceSession";
+  
+  console.log("Practice state set:", state.practiceMode);
+  render();
+}
+
+function selectPracticeRole(roleId) {
+  console.log("selectPracticeRole called with:", roleId);
+  console.log("Before selection - practiceMode:", JSON.stringify(state.practiceMode, null, 2));
+  
+  state.practiceMode.selectedRole = roleId;
+  
+  console.log("After selection - practiceMode:", JSON.stringify(state.practiceMode, null, 2));
+  console.log("Selected role set to:", state.practiceMode.selectedRole);
+  
+  render();
+  
+  // Check if the selection worked
+  setTimeout(() => {
+    console.log("After render - selectedRole:", state.practiceMode.selectedRole);
+  }, 100);
+}
+
+async function loadPracticeProgress() {
+  if (!auth.currentUser) return;
+  
+  try {
+    const userId = auth.currentUser.uid;
+    const progressDoc = await db.collection('practiceProgress').doc(userId).get();
+    
+    if (progressDoc.exists) {
+      const progress = progressDoc.data();
+      state.practiceMode.score = progress.totalScore || 0;
+      state.practiceMode.challengesCompleted = progress.challengesCompleted || 0;
+      state.practiceMode.completedChallenges = progress.completedChallenges || {};
+    }
+  } catch (error) {
+    console.error("Error loading practice progress:", error);
+    // Don't crash the app - just use default values
+    state.practiceMode.score = 0;
+    state.practiceMode.challengesCompleted = 0;
+    state.practiceMode.completedChallenges = {};
+  }
+}
+
+function runCode() {
+  const code = document.getElementById('codeInput').value;
+  const role = PRACTICE_ROLES.find(r => r.id === state.practiceMode.selectedRole);
+  const currentModule = role.modules[state.practiceMode.currentModule];
+  const currentChallenge = currentModule.challenges[state.practiceMode.currentChallenge];
+  
+  try {
+    // Create a safe execution environment
+    const results = [];
+    let allPassed = true;
+    
+    // Test each test case
+    currentChallenge.testCases.forEach((testCase, index) => {
+      try {
+        // Create a function from the user's code
+        const userFunction = new Function('return ' + code)();
+        
+        let result;
+        if (testCase.input === null) {
+          result = userFunction();
+        } else if (Array.isArray(testCase.input)) {
+          result = userFunction(...testCase.input);
+        } else {
+          result = userFunction(testCase.input);
+        }
+        
+        const passed = JSON.stringify(result) === JSON.stringify(testCase.expected);
+        allPassed = allPassed && passed;
+        
+        results.push({
+          test: index + 1,
+          passed: passed,
+          input: testCase.input,
+          expected: testCase.expected,
+          actual: result
+        });
+        
+      } catch (error) {
+        allPassed = false;
+        results.push({
+          test: index + 1,
+          passed: false,
+          input: testCase.input,
+          expected: testCase.expected,
+          actual: `Error: ${error.message}`
+        });
+      }
+    });
+    
+    // Display results
+    displayTestResults(results, allPassed);
+    
+    // Award points if all tests pass
+    if (allPassed) {
+      awardPoints(currentChallenge.points);
+      showSuccessMessage();
+    }
+    
+  } catch (error) {
+    displayError(`Code execution error: ${error.message}`);
+  }
+}
+
+function displayTestResults(results, allPassed) {
+  const testResults = document.getElementById('testResults');
+  const testOutput = document.getElementById('testOutput');
+  
+  testResults.style.display = 'block';
+  
+  const resultsHTML = results.map(result => `
+    <div class="test-case ${result.passed ? 'passed' : 'failed'}">
+      <div class="test-header">
+        <span>Test ${result.test}</span>
+        <span class="test-status">${result.passed ? '✅ PASS' : '❌ FAIL'}</span>
+      </div>
+      <div class="test-details">
+        <div>Input: ${JSON.stringify(result.input)}</div>
+        <div>Expected: ${JSON.stringify(result.expected)}</div>
+        <div>Actual: ${JSON.stringify(result.actual)}</div>
+      </div>
+    </div>
+  `).join('');
+  
+  const overallResult = allPassed ? 
+    '<div class="overall-result success">🎉 All tests passed! Great job!</div>' :
+    '<div class="overall-result error">Some tests failed. Keep trying!</div>';
+  
+  testOutput.innerHTML = overallResult + resultsHTML;
+}
+
+function displayError(message) {
+  const testResults = document.getElementById('testResults');
+  const testOutput = document.getElementById('testOutput');
+  
+  testResults.style.display = 'block';
+  testOutput.innerHTML = `<div class="error-message">${message}</div>`;
+}
+
+function awardPoints(points) {
+  state.practiceMode.score += points;
+  state.practiceMode.challengesCompleted = (state.practiceMode.challengesCompleted || 0) + 1;
+  
+  // Save progress to Firestore
+  if (auth.currentUser) {
+    savePracticeProgress();
+  }
+}
+
+function showSuccessMessage() {
+  setTimeout(() => {
+    alert(`🎉 Congratulations! You earned ${currentChallenge.points} points!`);
+  }, 500);
+}
+
+function resetCode() {
+  const role = PRACTICE_ROLES.find(r => r.id === state.practiceMode.selectedRole);
+  const currentModule = role.modules[state.practiceMode.currentModule];
+  const currentChallenge = currentModule.challenges[state.practiceMode.currentChallenge];
+  
+  document.getElementById('codeInput').value = currentChallenge.starterCode;
+  document.getElementById('testResults').style.display = 'none';
+}
+
+function toggleHint(index) {
+  const hintContent = document.getElementById(`hint-${index}`);
+  const toggle = document.querySelector(`[onclick="toggleHint(${index})"] .hint-toggle`);
+  
+  if (hintContent.style.display === 'none') {
+    hintContent.style.display = 'block';
+    toggle.textContent = '−';
+  } else {
+    hintContent.style.display = 'none';
+    toggle.textContent = '+';
+  }
+}
+
+function nextChallenge() {
+  const role = PRACTICE_ROLES.find(r => r.id === state.practiceMode.selectedRole);
+  const currentModule = role.modules[state.practiceMode.currentModule];
+  
+  if (state.practiceMode.currentChallenge < currentModule.challenges.length - 1) {
+    state.practiceMode.currentChallenge++;
+    render();
+  } else if (state.practiceMode.currentModule < role.modules.length - 1) {
+    state.practiceMode.currentModule++;
+    state.practiceMode.currentChallenge = 0;
+    render();
+  } else {
+    // Completed all challenges in this role
+    alert(`🎉 Congratulations! You've completed all ${role.title} challenges!`);
+    navigate('practice');
+  }
+}
+
+function previousChallenge() {
+  if (state.practiceMode.currentChallenge > 0) {
+    state.practiceMode.currentChallenge--;
+    render();
+  } else if (state.practiceMode.currentModule > 0) {
+    state.practiceMode.currentModule--;
+    const role = PRACTICE_ROLES.find(r => r.id === state.practiceMode.selectedRole);
+    state.practiceMode.currentChallenge = role.modules[state.practiceMode.currentModule].challenges.length - 1;
+    render();
+  }
+}
+
+async function savePracticeProgress() {
+  if (!auth.currentUser) return;
+  
+  try {
+    const userId = auth.currentUser.uid;
+    await db.collection('practiceProgress').doc(userId).set({
+      userId: userId,
+      totalScore: state.practiceMode.score,
+      challengesCompleted: state.practiceMode.challengesCompleted || 0,
+      completedChallenges: state.practiceMode.completedChallenges || {},
+      lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+    
+    console.log("Practice progress saved successfully!");
+  } catch (error) {
+    console.error("Error saving practice progress:", error);
+  }
+}
+
+async function loadPracticeProgress() {
+  if (!auth.currentUser) return;
+  
+  try {
+    const userId = auth.currentUser.uid;
+    const progressDoc = await db.collection('practiceProgress').doc(userId).get();
+    
+    if (progressDoc.exists) {
+      const progress = progressDoc.data();
+      state.practiceMode.score = progress.totalScore || 0;
+      state.practiceMode.challengesCompleted = progress.challengesCompleted || 0;
+      state.practiceMode.completedChallenges = progress.completedChallenges || {};
+    }
+  } catch (error) {
+    console.error("Error loading practice progress:", error);
+  }
+}
+
 
 function TrendsPage() {
   return `
@@ -1355,10 +2155,7 @@ function updateFilter(key, value) {
   debouncedRender()
 }
 
-function selectPracticeRole(roleId) {
-  state.practiceMode.selectedRole = roleId
-  render()
-}
+
 
 async function analyzeResume() {
   const resumeFile = document.getElementById('resumeInput').files[0];
@@ -1558,32 +2355,30 @@ async function fetchReviews() {
     .then(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
 }
 
-function PracticeSessionPage() {
-  const role = PRACTICE_ROLES.find(
-    r => r.id === state.practiceMode.selectedRole
-  );
-
-  return `
-    <div class="page-container">
-      <div class="page-header">
-        <h1 class="page-title">${role.title} Simulation</h1>
-        <p class="page-subtitle">
-          Difficulty: ${role.difficulty}
-        </p>
-      </div>
-
-      <div class="practice-session">
-        <p>This is where challenges will go.</p>
-
-        <button class="btn btn-secondary" onclick="navigate('practice')">
-          Back to Practice
-        </button>
-      </div>
-    </div>
-  `;
+function debugPracticeState() {
+  console.log("=== PRACTICE STATE DEBUG ===");
+  console.log("Full practiceMode state:", JSON.stringify(state.practiceMode, null, 2));
+  console.log("selectedRole:", state.practiceMode.selectedRole);
+  console.log("Available roles:", PRACTICE_ROLES.map(r => r.id));
+  console.log("Current page:", state.currentPage);
+  
+  // Test role selection
+  const testRoleId = 'software';
+  console.log("Testing selection of 'software' role...");
+  const testRole = PRACTICE_ROLES.find(r => r.id === testRoleId);
+  console.log("Found test role:", testRole);
+  
+  // Check if the issue is in the PracticePage
+  console.log("Checking PracticePage role cards...");
+  const roleCards = document.querySelectorAll('.role-card');
+  console.log("Found role cards:", roleCards.length);
+  roleCards.forEach((card, index) => {
+    console.log(`Card ${index}:`, card.textContent);
+  });
 }
-function startPracticeSession() {
-  state.currentPage = "practiceSession";
+
+function startFirstChallenge() {
+  state.practiceMode.currentChallenge = 0;
   render();
 }
 
@@ -1630,15 +2425,30 @@ function initNavbarScroll() {
   })
 }
 
-// MODIFIED: Enhanced render function with focus preservation
+
 async function render() {
   saveFocus(); // Save focus before re-rendering
   
   const app = document.getElementById("app")
   let content = ""
 
-  if (state.currentPage === "community") {
-    state.reviews = await fetchReviews();
+  try {
+    // Load practice progress if logged in (with error handling)
+    if (auth.currentUser && (state.currentPage === "practice" || state.currentPage === "practiceSession")) {
+      await loadPracticeProgress().catch(err => {
+        console.warn("Failed to load practice progress:", err);
+        // Continue with default values
+      });
+    }
+
+    if (state.currentPage === "community") {
+      state.reviews = await fetchReviews().catch(err => {
+        console.warn("Failed to load reviews:", err);
+        return [];
+      });
+    }
+  } catch (error) {
+    console.error("Error loading data:", error);
   }
 
   switch (state.currentPage) {
@@ -1708,4 +2518,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
