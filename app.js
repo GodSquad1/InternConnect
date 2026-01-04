@@ -6,13 +6,13 @@
 
 // Firebase configuration from Firebase Console
 const firebaseConfig = {
-  apiKey: "AIzaSyD5bbdw9K7hx738oYGxWCDKlYBs4CZJnpo",
-  authDomain: "internconnect-ec09e.firebaseapp.com",
-  projectId: "internconnect-ec09e",
-  storageBucket: "internconnect-ec09e.firebasestorage.app",
-  messagingSenderId: "617689931580",
-  appId: "1:617689931580:web:a5f6e6437cedae296d8839",
-  measurementId: "G-QHKGHHM7KP"
+  apiKey: "REPLACE WITH YOUR API",
+  authDomain: "REPLACE WITH YOUR API",
+  projectId: "REPLACE WITH YOUR API",
+  storageBucket: "REPLACE WITH YOUR API",
+  messagingSenderId: "REPLACE WITH YOUR API",
+  appId: "REPLACE WITH YOUR API",
+  measurementId: "REPLACE WITH YOUR API"
 };
 
 // Initialize Firebase
@@ -2212,8 +2212,8 @@ function applyToInternship(id) {
   alert(`Application started for internship #${id}! (This would redirect to the application page)`)
 }
 
-const ELEVEN_LABS_API_KEY = "45eefb5fd2a8aed8170a5f586745841786a723ba147e15ce76942998e6a65d08";
-const ELEVEN_LABS_VOICE_ID = "gJx1vCzNCD1EQHT212Ls";
+const ELEVEN_LABS_API_KEY = "";
+const ELEVEN_LABS_VOICE_ID = "";
 
 async function speakWithAssistant(promptText) {
   try {
