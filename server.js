@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Gemini API Key - you can hardcode it here or use .env file
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'API HERE';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 if (!GEMINI_API_KEY) {
 console.error(' ERROR: GEMINI_API_KEY is not set');
@@ -374,14 +374,14 @@ upload.fields([
 { name: 'code', maxCount: 1 }
 ]),
 async (req, res) => {
-console.log('\n===ANALYZE REQUEST RECEIVED ===');
+console.log('\n===  ANALYZE REQUEST RECEIVED ===');
 console.log('Time:', new Date().toISOString());
 console.log('Files:', req.files);
 
 try {
 // Validate files
 if (!req.files || !req.files.resume || !req.files.code) {
-console.log('Missing files!');
+console.log(' Missing files!');
 return res.status(400).json({
 error: 'Both resume and code files are required',
 received: {
@@ -434,14 +434,14 @@ hint: 'Make sure your ZIP contains code files with extensions like .js, .py, .ja
 }
 
 // Analyze code files
-console.log('Analyzing code structure...');
+console.log('🔍 Analyzing code structure...');
 const codeAnalysis = analyzeCodeFiles(codeFiles);
-console.log('Code analysis complete');
+console.log('✓ Code analysis complete');
 
 // Get AI analysis
-console.log(' Calling Gemini API...');
+console.log('🤖 Calling Gemini API...');
 const aiAnalysis = await analyzeWithGemini(resumeText, codeAnalysis, codeFiles);
-console.log(' AI analysis complete!');
+console.log('✓ AI analysis complete!');
 
 // Combine all analysis
 const finalAnalysis = {
@@ -458,15 +458,15 @@ languages: codeAnalysis.languages
 }
 };
 
-console.log('Sending response...');
+console.log('✅ Sending response...');
 res.json({
 success: true,
 analysis: finalAnalysis
 });
-console.log('Response sent successfully!\n');
+console.log(' Response sent successfully!\n');
 
 } catch (error) {
-console.error('ERROR:', error.message);
+console.error(' ERROR:', error.message);
 console.error(error.stack);
 res.status(500).json({
 error: 'Analysis failed',
@@ -502,7 +502,7 @@ console.log(`✓ Health check: http://localhost:${PORT}/api/health`);
 console.log(`✓ Gemini API: ${GEMINI_API_KEY ? 'Configured ✓' : 'NOT CONFIGURED ❌'}`);
 console.log(`✓ Model: gemini-2.0-flash`);
 console.log('========================================\n');
-console.log('Ready to analyze resumes!\n');
+console.log('Ready to analyze resumes! 📄✨\n');
 });
 
 module.exports = app;
