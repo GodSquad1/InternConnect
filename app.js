@@ -1,5 +1,5 @@
 // ============================================
-// INTERNHUB - COMPLETE VANILLA JS APPLICATION
+// INTERNCONNECT
 // ============================================
 
 // State Management
@@ -313,7 +313,7 @@ function Navigation() {
               <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
             </svg>
           </div>
-          <span class="logo-text">InternHub</span>
+          <span class="logo-text">InternConnect</span>
         </a>
 
         <div class="nav-links">
@@ -476,7 +476,7 @@ function SignInPage() {
     <div class="page-container">
       <div class="page-header">
         <h1 class="page-title">Sign In</h1>
-        <p class="page-subtitle">Access your InternHub account</p>
+        <p class="page-subtitle">Access your InternConnect account</p>
       </div>
 
       <form class="auth-form" onsubmit="signIn(event)">
@@ -503,7 +503,7 @@ function GetStartedPage() {
     <div class="page-container">
       <div class="page-header">
         <h1 class="page-title">Get Started</h1>
-        <p class="page-subtitle">Create your InternHub account</p>
+        <p class="page-subtitle">Create your InternConnect account</p>
       </div>
 
       <form class="auth-form" onsubmit="signUp(event)">
@@ -1229,7 +1229,7 @@ function Footer() {
                   <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
                 </svg>
               </div>
-              <span class="logo-text">InternHub</span>
+              <span class="logo-text">InternConnect</span>
             </div>
             <p class="footer-tagline">Breaking gatekeeping, one internship at a time.</p>
           </div>
@@ -1257,7 +1257,7 @@ function Footer() {
         </div>
         
         <div class="footer-bottom">
-          <p>&copy; 2026 InternHub. Built with ❤️ for students.</p>
+          <p>&copy; 2026 InternConnect. Built for students, by students</p>
         </div>
       </div>
     </footer>
@@ -1399,8 +1399,8 @@ async function speakWithAssistant(promptText) {
 async function getAssistantResponse(userQuery) {
   try {
     const systemPrompt = `
-      You are the InternHub AI Assistant. Please be extremely nice to all users.
-      InternHub is an internship aggregator that helps students find verified internships, practice skills, and get AI resume analysis.
+      You are the InternConnect AI Assistant. Please be extremely nice to all users.
+      InternConnect is an internship aggregator that helps students find verified internships, practice skills, and get AI resume analysis.
 
       ${
         state.resumeAnalysis
@@ -1671,7 +1671,7 @@ document.addEventListener("DOMContentLoaded", () => {
     assistantBtn.addEventListener("click", () => {
       if (!assistantChat) return;
       assistantChat.style.display = assistantChat.style.display === "none" ? "block" : "none";
-      speakWithAssistant("Hello! I am your InternHub AI assistant. I can guide you through the app, explain features, and suggest skills to improve on your resume.");
+      speakWithAssistant("Hello! I am your InternConnect AI assistant. I can guide you through the app, explain features, and suggest skills to improve on your resume.");
     });
   }
 
