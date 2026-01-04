@@ -439,9 +439,9 @@ const codeAnalysis = analyzeCodeFiles(codeFiles);
 console.log('✓ Code analysis complete');
 
 // Get AI analysis
-console.log('🤖 Calling Gemini API...');
+console.log(' Calling Gemini API...');
 const aiAnalysis = await analyzeWithGemini(resumeText, codeAnalysis, codeFiles);
-console.log('✓ AI analysis complete!');
+console.log(' AI analysis complete!');
 
 // Combine all analysis
 const finalAnalysis = {
@@ -458,7 +458,7 @@ languages: codeAnalysis.languages
 }
 };
 
-console.log('✅ Sending response...');
+console.log(' Sending response...');
 res.json({
 success: true,
 analysis: finalAnalysis
@@ -497,12 +497,12 @@ app.listen(PORT, () => {
 console.log('\n ========================================');
 console.log(' InternHub Resume Analyzer API');
 console.log('========================================');
-console.log(`✓ Server running on port ${PORT}`);
-console.log(`✓ Health check: http://localhost:${PORT}/api/health`);
-console.log(`✓ Gemini API: ${GEMINI_API_KEY ? 'Configured ✓' : 'NOT CONFIGURED ❌'}`);
-console.log(`✓ Model: gemini-2.0-flash`);
+console.log(`Server running on port ${PORT}`);
+console.log(`Health check: http://localhost:${PORT}/api/health`);
+console.log(`Gemini API: ${GEMINI_API_KEY ? 'Configured ✓' : 'NOT CONFIGURED '}`);
+console.log(` Model: gemini-2.0-flash`);
 console.log('========================================\n');
-console.log('Ready to analyze resumes! 📄✨\n');
+console.log('Ready to analyze resumes! \n');
 });
 
 module.exports = app;
